@@ -16,12 +16,20 @@ namespace IdleEngine.Generators
     public double CostFactor;
     public Multiplier[] Multipliers;
     public float ProductionCycleInSeconds;
+    public string Name;
+    public Sprite Image;
+
+    // 0..1
+    public float ProductionCycleNormalized => ProductionCycleInSeconds / ProductionTimeInSeconds;
 
     [NonSerialized]
     public float ProductionTimeInSeconds;
 
     [NonSerialized]
     public double NextBuildingCostsForOne;
+
+    [NonSerialized]
+    public double MoneyPerMinute;
 
     public void OnBeforeSerialize() { }
 
@@ -49,19 +57,24 @@ namespace IdleEngine.Generators
 
     public double Produce(float deltaTimeInSeconds)
     {
+      return Produce(deltaTimeInSeconds, ref ProductionCycleInSeconds);
+    }
+
+    private double Produce(float deltaTimeInSeconds, ref float productionCycleInSeconds)
+    {
       if (Owned == 0)
       {
         return 0;
       }
 
-      ProductionCycleInSeconds += deltaTimeInSeconds;
+      productionCycleInSeconds += deltaTimeInSeconds;
 
       double calculatedSum = 0;
 
-      while (ProductionCycleInSeconds >= ProductionTimeInSeconds)
+      while (productionCycleInSeconds >= ProductionTimeInSeconds)
       {
         calculatedSum += BaseRevenue * Owned * _multiplier;
-        ProductionCycleInSeconds -= ProductionTimeInSeconds;
+        productionCycleInSeconds -= ProductionTimeInSeconds;
       }
 
       return calculatedSum;
@@ -72,6 +85,13 @@ namespace IdleEngine.Generators
       UpdateModifiers();
       UpdateMultiplier();
       UpdateNextBuildingCosts();
+      UpdateMoneyPerMinute();
+    }
+
+    private void UpdateMoneyPerMinute()
+    {
+      var productionCycleInSeconds = 0f;
+      MoneyPerMinute = Produce(60, ref productionCycleInSeconds);
     }
 
     private void UpdateNextBuildingCosts()
