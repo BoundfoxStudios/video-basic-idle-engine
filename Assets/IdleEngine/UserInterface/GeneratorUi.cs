@@ -25,7 +25,7 @@ namespace IdleEngine.UserInterface
       _generator = generator;
       
       PirateImage.sprite = generator.Image;
-      PirateNameText.text = generator.Name;
+      PirateNameText.text = generator.GetInstanceID().ToString();
     }
 
     public void Buy()

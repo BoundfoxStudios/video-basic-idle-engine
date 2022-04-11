@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b99c9d4e8cb4cbfb40bb92ab30d1c4, type: 3}
   m_Name: Anne
   m_EditorClassIdentifier: 
-  Owned: 0
   BaseCost: 100
   BaseRevenue: 20
   BaseProductionTimeInSeconds: 20
@@ -24,6 +23,5 @@ MonoBehaviour:
     Value: 30
   - Level: 100
     Value: 1000
-  ProductionCycleInSeconds: 0
   Name: Anne Bonny
   Image: {fileID: 979803648, guid: 40dcc66923d1949ca95f4ed874e84f52, type: 3}

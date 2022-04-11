@@ -1,21 +1,43 @@
 ﻿using System;
 using System.Linq;
+using IdleEngine.SaveSystem;
 using IdleEngine.Sessions;
 using UnityEngine;
 
 namespace IdleEngine.Generators
 {
   [CreateAssetMenu(fileName = "Generator", menuName = "Game/Generator")]
-  public class Generator : ScriptableObject, ISerializationCallbackReceiver
+  public class Generator : ScriptableObject, IRestorable<Generator.RuntimeData>
   {
+    [Serializable]
+    public class RuntimeData
+    {
+      public string Id;
+      public int Owned;
+      public float ProductionCycleInSeconds;
+    }
+
+    private RuntimeData _data = new RuntimeData();
+    
     private double _multiplier;
-    public int Owned;
+
+    public int Owned
+    {
+      get => _data.Owned;
+      set => _data.Owned = value;
+    }
+
+    public float ProductionCycleInSeconds
+    {
+      get => _data.ProductionCycleInSeconds;
+      set => _data.ProductionCycleInSeconds = value;
+    }
+    
     public double BaseCost;
     public double BaseRevenue;
     public float BaseProductionTimeInSeconds;
     public double CostFactor;
     public Multiplier[] Multipliers;
-    public float ProductionCycleInSeconds;
     public string Name;
     public Sprite Image;
 
@@ -30,11 +52,10 @@ namespace IdleEngine.Generators
 
     [NonSerialized]
     public double MoneyPerMinute;
-
-    public void OnBeforeSerialize() { }
-
-    public void OnAfterDeserialize()
+    
+    private void OnEnable()
     {
+      _data = new RuntimeData();
       Precalculate();
     }
 
@@ -57,7 +78,10 @@ namespace IdleEngine.Generators
 
     public double Produce(float deltaTimeInSeconds)
     {
-      return Produce(deltaTimeInSeconds, ref ProductionCycleInSeconds);
+      var productionCycleInSeconds = ProductionCycleInSeconds;
+      var result =  Produce(deltaTimeInSeconds, ref productionCycleInSeconds);
+      ProductionCycleInSeconds = productionCycleInSeconds;
+      return result;
     }
 
     private double Produce(float deltaTimeInSeconds, ref float productionCycleInSeconds)
@@ -130,6 +154,22 @@ namespace IdleEngine.Generators
 
     private void OnValidate()
     {
+      Precalculate();
+    }
+
+    public RuntimeData GetRestorableData()
+    {
+      return new RuntimeData()
+      {
+        Owned = Owned,
+        ProductionCycleInSeconds = ProductionCycleInSeconds,
+        Id = name
+      };
+    }
+
+    public void SetRestorableData(RuntimeData data)
+    {
+      _data = data;
       Precalculate();
     }
   }

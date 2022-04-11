@@ -1,4 +1,5 @@
 using System;
+using IdleEngine.SaveSystem;
 using IdleEngine.Sessions;
 using IdleEngine.UserInterface;
 using TMPro;
@@ -68,6 +69,8 @@ namespace IdleEngine
         return;
       }
 
+      Load();
+
       Session.CalculateOfflineProgression();
     }
 
@@ -79,6 +82,30 @@ namespace IdleEngine
       }
 
       Session.LastTicks = DateTime.UtcNow.Ticks;
+      
+      Save();
+    }
+
+    private void Save()
+    {
+      var data = Session.GetRestorableData();
+      var json = JsonUtility.ToJson(data);
+      
+      SaveFileManager.Write(Session.name, json);
+    }
+
+    private void Load()
+    {
+      if (!SaveFileManager.TryLoad(Session.name, out var content))
+      {
+        // Neues Spiel wurde angefangen
+        Session.Money = Session.Generators[0].NextBuildingCostsForOne;
+        return;
+      }
+      
+      // Spiel laden
+      var data = JsonUtility.FromJson<Session.SaveData>(content);
+      Session.SetRestorableData(data);
     }
   }
 }

@@ -13,6 +13,8 @@ namespace IdleEngine.Editor
       var generator = (Generator) target;
       
       EditorGUILayout.LabelField(nameof(Generator.NextBuildingCostsForOne), generator.NextBuildingCostsForOne.ToString());
+      EditorGUILayout.LabelField(nameof(Generator.Owned), generator.Owned.ToString());
+      EditorGUILayout.LabelField(nameof(Generator.ProductionCycleInSeconds), generator.ProductionCycleInSeconds.ToString());
     }
   }
 }

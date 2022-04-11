@@ -16,5 +16,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c0092610aec646098746df2e5d2e8725, type: 2}
   - {fileID: 11400000, guid: fea16778dda64a35967c0d962da8ee47, type: 2}
   - {fileID: 11400000, guid: a9d0e968d2c984ff19856c25f7f0c839, type: 2}
-  Money: 0
-  LastTicks: 0

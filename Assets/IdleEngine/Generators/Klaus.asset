@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b99c9d4e8cb4cbfb40bb92ab30d1c4, type: 3}
   m_Name: Klaus
   m_EditorClassIdentifier: 
-  Owned: 1
+  HelloWorld: Whatsup!121
   BaseCost: 3
   BaseRevenue: 10
   BaseProductionTimeInSeconds: 5
@@ -24,6 +24,5 @@ MonoBehaviour:
     Value: 10
   - Level: 10
     Value: 100
-  ProductionCycleInSeconds: 0.53014106
   Name: "Klaus St\xF6rtebecker"
   Image: {fileID: 1421609092, guid: d4df26033e0dc4ea5b77a640f19e1d24, type: 3}
